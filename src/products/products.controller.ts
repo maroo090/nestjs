@@ -1,7 +1,8 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export class ProductsController {
+    @Get("/api/products")
   public getAllProducts() {
     return [
       { id: 1, title: 'book', price: 10 },

@@ -3,13 +3,17 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   NotFoundException,
   Param,
   Post,
   Put,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { type CreateProductsDto } from './dtos/create-products.dto';
 import { UpdateProduct } from './dtos/update-product.dto';
+import type { Request, Response } from 'express';
 type ProductType = { id: number; title: string; price: number };
 @Controller('api/products')
 export class ProductsController {
@@ -18,6 +22,21 @@ export class ProductsController {
     { id: 2, title: 'pen', price: 5 },
     { id: 3, title: 'laptop', price: 500 },
   ];
+  // @Post()
+  // public createProductsByExpressWay(
+  //   @Req() req: Request<unknown, unknown, CreateProductsDto>,
+  //   @Res() res: Response,
+  //   @Headers() header: any,
+  // ) {
+  //   const newProducts: ProductType = {
+  //     id: this.products.length + 1,
+  //     title: req.body.title,
+  //     price: req.body.price,
+  //   };
+  //   console.log(header)
+  //   this.products.push(newProducts);
+  //   return res.status(201).json(newProducts);
+  // }
   @Post()
   public createProducts(@Body() body: CreateProductsDto) {
     const newProducts: ProductType = {

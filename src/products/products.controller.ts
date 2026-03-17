@@ -6,10 +6,11 @@ import {
   Headers,
   NotFoundException,
   Param,
+  ParseIntPipe,
   Post,
   Put,
-  Req,
-  Res,
+  // Req,
+  // Res,
 } from '@nestjs/common';
 import { type CreateProductsDto } from './dtos/create-products.dto';
 import { UpdateProduct } from './dtos/update-product.dto';
@@ -51,9 +52,9 @@ export class ProductsController {
   public getAllProducts() {
     return this.products;
   }
-  @Get('/api/products/:id')
-  public getProductById(@Param('id') id: string) {
-    const product = this.products.find((p) => p.id === parseInt(id));
+  @Get('/:id')
+  public getProductById(@Param('id', ParseIntPipe) id: number) {
+    const product = this.products.find((p) => p.id === id);
     if (!product) throw new NotFoundException();
     return product;
   }

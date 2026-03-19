@@ -1,4 +1,22 @@
+import {
+  IsString,
+  IsNumber,
+  IsNotEmpty,
+  Min,
+  MinLength,
+  MaxLength,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
 export class CreateProductsDto {
-  price: number;
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(3)
+  @MaxLength(150)
   title: string;
+  @IsNumber()
+  @IsNotEmpty()
+  @Type(() => Number)
+  @Min(0)
+  price: number;
 }

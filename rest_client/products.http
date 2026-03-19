@@ -1,0 +1,17 @@
+
+# get single product
+
+POST  http://localhost:5000/api/products
+
+Content-Type: application/json
+
+{
+    "price":50,
+    "title":"computer"
+}
+
+GET http://localhost:5000/api/products/1
+
+
+
+GET http://localhost:5000/api/products/

@@ -1,13 +1,12 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Get } from '@nestjs/common';
+import { UsersService } from './user.service';
 
 @Controller()
 export class UsersController {
+  constructor(private readonly userService: UsersService) { }
   @Get('/api/products')
   public getAllProducts() {
-    return [
-      { id: 1, title: 'book', price: 10 },
-      { id: 2, title: 'pen', price: 5 },
-      { id: 3, title: 'laptop', price: 500 },
-    ];
+    return this.userService.getAllUsers();
   }
 }

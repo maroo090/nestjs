@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Body,
   Controller,
@@ -15,7 +16,7 @@ import { UpdateProduct } from './dtos/update-product.dto';
 import { ProductService } from './products.service';
 @Controller('api/products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductService) {}
+  constructor(private readonly productsService: ProductService) { }
   // @Post()
   // public createProductsByExpressWay(
   //   @Req() req: Request<unknown, unknown, CreateProductsDto>,
@@ -39,6 +40,10 @@ export class ProductsController {
   public getAllProducts() {
     return this.productsService.getAllProducts();
   }
+  @Get('/usersAndProducts')
+  public getAllUsersAndProducts() {
+    return this.productsService.getAllUsersAndProducts();
+  }
   @Get('/:id')
   public getProductById(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.getProductById(id);
@@ -50,6 +55,7 @@ export class ProductsController {
   ) {
     return this.productsService.updateProductById(body, id);
   }
+
   @Delete('/:id')
   public deleteProductsById(@Param('id') id: string) {
     return this.productsService.deleteProductsById(id);

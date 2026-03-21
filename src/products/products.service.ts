@@ -1,11 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductsDto } from './dtos/create-products.dto';
 import { UpdateProduct } from './dtos/update-product.dto';
+import { UsersService } from 'src/users/user.service';
 
 /* eslint-disable prettier/prettier */
 type ProductType = { id: number; title: string; price: number };
 @Injectable()
 export class ProductService {
+    constructor(private readonly usersService: UsersService) { }
     private products: ProductType[] = [
         { id: 1, title: 'book', price: 10 },
         { id: 2, title: 'pen', price: 5 },
@@ -22,7 +24,9 @@ export class ProductService {
     }
 
     public getAllProducts() {
-        return this.products;
+        const products = this.products;
+        const users = this.usersService.getAllUsers();
+        return { products, users };
     }
 
     public getProductById(id: number) {
@@ -40,7 +44,11 @@ export class ProductService {
         console.log(updateProductDto)
         return { message: 'products updates ' };
     }
-
+    public getAllUsersAndProducts() {
+        const products = this.products;
+        const users = this.usersService.getAllUsers();
+        return { products, users };
+    }
     public deleteProductsById(id: string) {
         const product = this.products.find((p) => p.id === parseInt(id));
         if (!product) throw new NotFoundException();

@@ -7,7 +7,6 @@ import { Product } from './products.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 /* eslint-disable prettier/prettier */
-type ProductType = { id: number; title: string; price: number };
 @Injectable()
 export class ProductService {
     constructor(

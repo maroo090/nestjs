@@ -14,6 +14,10 @@ export class CreateProductsDto {
   @MinLength(3)
   @MaxLength(150)
   title: string;
+  @IsString()
+  @MinLength(3)
+  @MaxLength(150)
+  description: string;
   @IsNumber()
   @IsNotEmpty()
   @Type(() => Number)

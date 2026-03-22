@@ -8,6 +8,11 @@ export class UpdateProduct {
     @IsOptional()
     title?: string;
 
+    @IsString()
+    @Length(3, 150)
+    @IsOptional()
+    description?: string;
+
     @IsNumber()
     @IsNotEmpty()
     @Min(0)

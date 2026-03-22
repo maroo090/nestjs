@@ -51,13 +51,13 @@ export class ProductsController {
   @Put('/:id')
   public updateProductById(
     @Body() body: UpdateProduct,
-    @Param('id', ParseIntPipe) id: string,
+    @Param('id', ParseIntPipe) id: number,
   ) {
     return this.productsService.updateProductById(body, id);
   }
 
   @Delete('/:id')
-  public deleteProductsById(@Param('id') id: string) {
+  public deleteProductsById(@Param('id') id: number) {
     return this.productsService.deleteProductsById(id);
   }
 }

@@ -1,13 +1,22 @@
-import { Controller, Get } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { UsersService } from './user.service';
+import { RegisterDto } from './dtos/register.dtos';
+import { LoginDto } from './dtos/login.dto';
 
-@Controller()
+@Controller('api/users')
 export class UsersController {
-  @Get('/api/products')
-  public getAllProducts() {
-    return [
-      { id: 1, title: 'book', price: 10 },
-      { id: 2, title: 'pen', price: 5 },
-      { id: 3, title: 'laptop', price: 500 },
-    ];
+  constructor(private readonly userService: UsersService) { }
+  @Get('/api/users')
+  public getAllUsers() {
+    return this.userService.getAllUsers();
+  }
+  @Post('auth/register')
+  public register(@Body() body: RegisterDto) {
+    return this.userService.register(body);
+  }
+  @Post('auth/login')
+  public login(@Body() body: LoginDto) {
+    return this.userService.login(body);
   }
 }

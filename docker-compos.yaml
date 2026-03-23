@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: nestjs-postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: moawed2005
+      POSTGRES_DB: hotel_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  pgAdmin:
+    image: dpage/pgadmin4
+    container_name: nestjs-pgadmin
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: moawed@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: moawed2005
+volumes:
+  postgres_data:

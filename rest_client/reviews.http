@@ -1,0 +1,16 @@
+POST  http://localhost:5000/api/reviews
+Content-Type: application/json
+
+{
+    "comment":"this good product",
+    "userId":1,
+    "rating":4,
+    "productId":1
+}
+
+###
+GET  http://localhost:5000/api/reviews
+
+
+### 
+DELETE  http://localhost:5000/api/reviews/1

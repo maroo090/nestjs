@@ -1,13 +1,19 @@
-import { Controller, Get } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import { ReviewService } from './reviews.service';
+import { CreateReviewsDto } from './dtos/create.reviews.dtos';
 
 @Controller()
 export class ReviewController {
-  @Get('/api/products')
-  public getAllProducts() {
-    return [
-      { id: 1, title: 'book', price: 10 },
-      { id: 2, title: 'pen', price: 5 },
-      { id: 3, title: 'laptop', price: 500 },
-    ];
+  constructor(private readonly reviewService: ReviewService) {}
+
+  @Get('/api/reviews')
+  public getAllReviews() {
+    return this.reviewService.getAllReviews();
+  }
+
+  @Post('/api/reviews')
+  public createReview(@Body() createReviewsDto: CreateReviewsDto) {
+    return this.reviewService.createReviews(createReviewsDto);
   }
 }

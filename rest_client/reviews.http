@@ -5,7 +5,7 @@ Content-Type: application/json
     "comment":"this good product",
     "userId":1,
     "rating":4,
-    "productId":2
+    "productId":1
 }
 
 ###

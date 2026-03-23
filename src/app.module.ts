@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -36,3 +37,4 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   // controllers: [],
 })
 export class AppModule { }
+// 

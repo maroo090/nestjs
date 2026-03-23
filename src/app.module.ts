@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { ReviewsModule } from './reviews/reviews.modules';
 import { ProductModule } from './products/product.module';
@@ -10,28 +10,29 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
     ProductModule,
     UsersModule,
     ReviewsModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      username: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      password: 'moawed2005',
-      database: 'hotel_db',
-      autoLoadEntities: true,
-      synchronize: true,
-      entities: ['dist/**/*.entity{.ts,.js}'],
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        return {
+          type: 'postgres',
+          username: config.get<string>('DB_USERNAME'),
+          host: config.get<string>('DB_HOST'),
+          port: config.get<number>('DB_PORT'),
+          password: config.get<string>('DB_PASSWORD'),
+          database: config.get<string>('DB_NAME'),
+          autoLoadEntities: true,
+          synchronize: process.env.NODE_ENV !== 'production',
+        };
+      },
     }),
   ],
   // exports: [],
   // providers: [],
   // controllers: [],
 })
-export class AppModule {
-  constructor() {
-    console.log('Database Host:', process.env.HOST);
-  }
-}
+export class AppModule { }

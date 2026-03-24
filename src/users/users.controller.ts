@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post, Req } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { RegisterDto } from './dtos/register.dtos';
 import { LoginDto } from './dtos/login.dto';
@@ -18,5 +18,10 @@ export class UsersController {
   @Post('auth/login')
   public login(@Body() body: LoginDto) {
     return this.userService.login(body);
+  }
+  @Get('auth/profile')
+  public getCurrentUser(@Headers() headers) {
+    return this.userService.getCurrantUser(headers.authorization);
+   
   }
 }

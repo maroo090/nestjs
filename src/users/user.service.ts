@@ -21,7 +21,7 @@ export class UsersService {
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService
     ) { }
-    public getAllUsers() {
+    public getAllUsers(): Promise<User[]> {
         const user = this.userRepo.find();
         return user;
     }
@@ -61,9 +61,7 @@ export class UsersService {
 
         return { user: user, accessToken }
     }
-    public async getCurrantUser(id: number) {
-
-
+    public async getCurrentUser(id: number) {
         const user = await this.userRepo.findOne({ where: { id } })
         if (!user) throw new NotFoundException('user not found')
         return user;

@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { CURRANT_TIMESTAMP } from 'src/utils/constants';
 import { Product } from 'src/products/products.entity';
 import { Review } from 'src/reviews/reviews.entity';
-import { UserType } from 'src/utils/enums';
+import { UserEnum } from 'src/utils/enums';
 import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'users' })
@@ -22,7 +22,7 @@ export class User {
     @Exclude()
     password: string;
 
-    @Column({ type: 'enum', enum: UserType, default: UserType.USER })
+    @Column({ type: 'enum', enum: UserEnum, default: UserEnum.USER })
     userType: string
 
 

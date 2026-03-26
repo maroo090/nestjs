@@ -3,6 +3,7 @@ import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { Request } from "express";
+import { JWTPayloadType } from "src/utils/types";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -17,14 +18,14 @@ export class AuthGuard implements CanActivate {
 
         if (type == 'Bearer' || token) {
             try {
-                const payload: Record<string, any> = await this.jwtService.verifyAsync(token, {
+                const payload: JWTPayloadType= await this.jwtService.verifyAsync(token, {
                     secret: this.configService.get<string>('JWT_SECRET') ?? '',
                     ignoreExpiration: false
                 })
                 request['user'] = payload
             } catch (error) {
                 console.log(error)
-                return false
+                return false 
             }
         } else { return false }
         return true

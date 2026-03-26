@@ -1,18 +1,25 @@
+/* eslint-disable prettier/prettier */
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
 import { RegisterDto } from './dtos/register.dtos';
-import { BadRequestException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+    BadRequestException,
+    NotFoundException,
+    UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LoginDto } from './dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { AuthReturnType, JWTPayloadType } from 'src/utils/types';
+import { ConfigService } from '@nestjs/config';
 /* eslint-disable prettier/prettier */
 export class UsersService {
     constructor(
         @InjectRepository(User)
         private readonly userRepo: Repository<User>,
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
+        private readonly configService: ConfigService
     ) { }
     public getAllUsers() {
         const user = this.userRepo.find();
@@ -54,13 +61,12 @@ export class UsersService {
 
         return { user: user, accessToken }
     }
-    public async getCurrantUser(token: string) {
-        const JWTToken = token.split(" ")[1];
+    public async getCurrantUser(id: number) {
 
-        
-        // const user = await this.userRepo.findOne({ where: { id } })
-        // if (!user) throw new NotFoundException('user not found')
-        // return user;
+
+        const user = await this.userRepo.findOne({ where: { id } })
+        if (!user) throw new NotFoundException('user not found')
+        return user;
     }
     public logout() {
 

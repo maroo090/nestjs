@@ -1,8 +1,16 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, Headers, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post, UseGuards } from '@nestjs/common';
+import type { Request } from 'express';
 import { UsersService } from './user.service';
 import { RegisterDto } from './dtos/register.dtos';
 import { LoginDto } from './dtos/login.dto';
+import { AuthGuard } from './guard/auth.guard';
+import {
+  type JWTPayloadType
+} from 'src/utils/types';
+import { UserDecorator } from './decorators/users.decorators';
+
+
 
 @Controller('api/users')
 export class UsersController {
@@ -20,8 +28,10 @@ export class UsersController {
     return this.userService.login(body);
   }
   @Get('auth/profile')
-  public getCurrentUser(@Headers() headers) {
-    return this.userService.getCurrantUser(headers.authorization);
-   
+  @UseGuards(AuthGuard)
+  public getCurrentUser(@UserDecorator() payload: JWTPayloadType) {
+    console.log("payload is", payload)
+    return this.userService.getCurrantUser(Number(payload.id));
+
   }
 }

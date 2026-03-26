@@ -18,3 +18,6 @@ export type AuthReturnType = {
     accessToken: string
 
 }
+export interface AuthenticatedRequest extends Request {
+    user: { id: number, userType: string };
+}

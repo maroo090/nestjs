@@ -3,16 +3,24 @@ import { Exclude } from 'class-transformer';
 import {
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Length,
   MinLength,
 } from 'class-validator';
+
 /**
- * Data Transfer Object for user login
+ * Data Transfer Object for user registration
+ * @property username - User's display name (optional, 2-150 chars)
  * @property email - User's email address (required, valid format)
  * @property password - User's password (required, min 6 chars)
  */
-export class LoginDto {
+export class RegisterDto {
+  @IsOptional()
+  @IsString()
+  @Length(2, 150)
+  username: string;
+
   @IsEmail()
   @Length(2, 150)
   @IsNotEmpty()
@@ -21,6 +29,5 @@ export class LoginDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(6)
-  // @Exclude( )
   password: string;
 }

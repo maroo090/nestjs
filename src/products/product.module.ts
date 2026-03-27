@@ -6,10 +6,13 @@ import { UsersModule } from 'src/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './products.entity';
 
+/**
+ * Products module that handles product management
+ * Provides CRUD operations for products and user-product relationships
+ */
 @Module({
   controllers: [ProductsController],
   providers: [ProductService],
-  imports: [UsersModule, TypeOrmModule.forFeature([Product]),
-  ]
+  imports: [UsersModule, TypeOrmModule.forFeature([Product])],
 })
-export class ProductModule { }
+export class ProductModule {}

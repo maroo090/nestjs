@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
-import { ReviewsModule } from './reviews/reviews.modules';
+import { ReviewsModule } from './reviews/reviews.module';
 import { ProductModule } from './products/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 

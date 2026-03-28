@@ -6,6 +6,8 @@ import { UsersModule } from './users/users.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { ProductModule } from './products/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggerInterceptor } from './utils/interceptor/logger.interceptor';
 
 @Module({
   imports: [
@@ -33,7 +35,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
   ],
   // exports: [],
-  // providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggerInterceptor,
+    }
+  ],
   // controllers: [],
 })
 export class AppModule { }

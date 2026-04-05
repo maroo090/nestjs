@@ -8,7 +8,7 @@ import { AuthGuard } from './guard/auth.guard';
 import {
   type JWTPayloadType
 } from 'src/utils/types';
-import { UserDecorator } from './decorators/users.decorators';
+import { CurrentUserDecorator } from './decorators/users.decorators';
 import { Roles } from './decorators/user.role.decorators';
 import { UserEnum } from '../utils/enums';
 import { AuthRoleGard } from './guard/auth-role.gard';
@@ -35,7 +35,7 @@ export class UsersController {
   }
   @Get('auth/profile')
   @UseGuards(AuthGuard)
-  public getCurrentUser(@UserDecorator() payload: JWTPayloadType) {
+  public getCurrentUser(@CurrentUserDecorator() payload: JWTPayloadType) {
     console.log("payload is", payload)
     return this.userService.getCurrentUser(Number(payload.id));
   }
@@ -43,7 +43,7 @@ export class UsersController {
   @Put()
   @UseGuards(AuthRoleGard)
   @Roles(UserEnum.ADMIN, UserEnum.USER)
-  public updateUser(@UserDecorator() payload: JWTPayloadType, @Body() body: UpdateUserDto) {
+  public updateUser(@CurrentUserDecorator() payload: JWTPayloadType, @Body() body: UpdateUserDto) {
     console.log(body)
     console.log("dsadas", payload)
     return this.userService.updateUser(Number(payload.id), body);
@@ -52,7 +52,7 @@ export class UsersController {
   @Delete(':id')
   @UseGuards(AuthRoleGard)
   @Roles(UserEnum.ADMIN, UserEnum.USER)
-  public deleteUser(@Param('id', ParseIntPipe) id: number, @UserDecorator() payload: JWTPayloadType) {
+  public deleteUser(@Param('id', ParseIntPipe) id: number, @CurrentUserDecorator() payload: JWTPayloadType) {
     return this.userService.deleteUser(id, payload);
   }
 }

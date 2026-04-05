@@ -5,6 +5,7 @@ import { ProductService } from './products.service';
 import { UsersModule } from 'src/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './products.entity';
+import { JwtModule } from '@nestjs/jwt';
 
 /**
  * Products module that handles product management
@@ -13,6 +14,6 @@ import { Product } from './products.entity';
 @Module({
   controllers: [ProductsController],
   providers: [ProductService],
-  imports: [UsersModule, TypeOrmModule.forFeature([Product])],
+  imports: [UsersModule, TypeOrmModule.forFeature([Product]), JwtModule],
 })
-export class ProductModule {}
+export class ProductModule { }

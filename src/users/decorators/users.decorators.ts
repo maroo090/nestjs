@@ -7,7 +7,7 @@ import { AuthenticatedRequest } from 'src/utils/types';
  * Used to get the JWT payload (user id and userType) in route handlers
  * @returns The user payload from the request
  */
-export const UserDecorator = createParamDecorator(
+export const CurrentUserDecorator = createParamDecorator(
   (data: any, context: ExecutionContext) => {
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const payload = request.user;

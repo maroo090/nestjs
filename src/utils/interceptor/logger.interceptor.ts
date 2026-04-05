@@ -12,8 +12,7 @@ export class LoggerInterceptor implements NestInterceptor {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { password, ...rest } = data
             return { ...rest }
-        }
-
-        ))
+        },
+        ));
     }
 }

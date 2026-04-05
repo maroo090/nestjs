@@ -26,30 +26,32 @@ import {
 @Entity({ name: 'products' })
 export class Product {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: 'varchar', length: 150 })
-  title: string;
+  title!: string;
 
   @Column()
-  price: number;
+  price!: number;
 
   @Column()
-  description: string;
+  description!: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => CURRANT_TIMESTAMP })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({
     type: 'timestamp',
     default: () => CURRANT_TIMESTAMP,
     onUpdate: CURRANT_TIMESTAMP,
   })
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @OneToMany(() => Review, (reviews) => reviews.product)
-  reviews: Review[];
-
+  reviews!: Review[];
+  // **if i want to add review when i fetch the product globally  **{eager:true}**
   @ManyToOne(() => User, (user) => user.products)
-  user: User;
+  //** */ if i want to add user when i fetch the product  globally**{eager:true}**
+
+  user!: User;
 }

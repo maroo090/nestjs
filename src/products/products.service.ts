@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductsDto } from './dtos/create-products.dto';
 import { UpdateProduct } from './dtos/update-product.dto';
@@ -15,15 +16,21 @@ export class ProductService {
     private readonly usersService: UsersService,
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
-  ) {}
+  ) { }
 
   /**
    * Creates a new product
    * @param dto - CreateProductsDto containing product details
+   * @param userIs id of the logged in user 
    * @returns Promise resolving to the created Product entity
    */
-  public async createProducts(dto: CreateProductsDto): Promise<Product> {
-    const newProduct = this.productRepository.create(dto);
+  public async createProducts(dto: CreateProductsDto, userId: number): Promise<Product> {
+    const id = await this.usersService.getCurrentUser(userId);
+    const newProduct = this.productRepository.create({
+      ...dto,
+      title: dto.title.toLowerCase(),
+      user: id,
+    });
     return await this.productRepository.save(newProduct);
   }
 
@@ -33,6 +40,7 @@ export class ProductService {
    */
   public getAllProducts(): Promise<Product[]> {
     return this.productRepository.find();
+    // ** { relations: { user: true, reviews: true } } to fetch the related reviews and user that create this product 
   }
 
   /**
@@ -66,7 +74,7 @@ export class ProductService {
     product.price = updateProductDto.price ?? product.price;
     return await this.productRepository.save(product);
   }
-  public getAllUsersAndProducts() {}
+  public getAllUsersAndProducts() { }
   /**
    * Deletes a product by ID
    * @param id - The product's unique identifier

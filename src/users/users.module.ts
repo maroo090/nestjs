@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import {  AuthProvider } from './auth.provider';
 
 /**
  * Users module that handles user authentication and management
@@ -13,7 +14,7 @@ import { ConfigService } from '@nestjs/config';
  */
 @Module({
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, AuthProvider],
   exports: [UsersService],
   imports: [
     TypeOrmModule.forFeature([User]),
@@ -29,4 +30,4 @@ import { ConfigService } from '@nestjs/config';
     }),
   ],
 })
-export class UsersModule {}
+export class UsersModule { }

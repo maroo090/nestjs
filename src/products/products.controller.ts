@@ -8,26 +8,34 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateProductsDto } from './dtos/create-products.dto';
 import { UpdateProduct } from './dtos/update-product.dto';
 import { ProductService } from './products.service';
 import { Product } from './products.entity';
+import { AuthRoleGard } from 'src/users/guard/auth-role.gard';
+import { Roles } from 'src/users/decorators/user.role.decorators';
+import { UserEnum } from 'src/utils/enums';
+import { CurrentUserDecorator } from 'src/users/decorators/users.decorators';
+import { type JWTPayloadType } from 'src/utils/types';
 
 /**
  * Controller for handling product-related HTTP requests
  */
 @Controller('api/products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductService) {}
+  constructor(private readonly productsService: ProductService) { }
   /**
    * Creates a new product
    * @param body - CreateProductsDto containing product details
    * @returns Promise resolving to created Product entity
    */
   @Post()
-  public create(@Body() body: CreateProductsDto): Promise<Product> {
-    return this.productsService.createProducts(body);
+  @UseGuards(AuthRoleGard)
+  @Roles(UserEnum.ADMIN)
+  public create(@Body() body: CreateProductsDto, @CurrentUserDecorator() payload: JWTPayloadType): Promise<Product> {
+    return this.productsService.createProducts(body, payload.id);
   }
   /**
    * Retrieves all products
@@ -63,6 +71,8 @@ export class ProductsController {
    * @returns Promise resolving to updated Product entity
    */
   @Put('/:id')
+  @UseGuards(AuthRoleGard)
+  @Roles(UserEnum.ADMIN)
   public updateProductById(
     @Body() body: UpdateProduct,
     @Param('id', ParseIntPipe) id: number,
@@ -76,6 +86,8 @@ export class ProductsController {
    * @returns Promise resolving to removed Product entity
    */
   @Delete('/:id')
+  @UseGuards(AuthRoleGard)
+  @Roles(UserEnum.ADMIN)
   public deleteProductsById(@Param('id') id: number): Promise<Product> {
     return this.productsService.deleteProductsById(id);
   }

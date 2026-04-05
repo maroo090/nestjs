@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CreateProductsDto } from './dtos/create-products.dto';
@@ -42,8 +43,13 @@ export class ProductsController {
    * @returns Promise resolving to array of Product entities
    */
   @Get()
-  public getAllProducts(): Promise<Product[]> {
-    return this.productsService.getAllProducts();
+  public getAllProducts(
+    @Query('title') title: string,
+    @Query('minPrice') minPrice: string,
+    @Query('maxPrice') maxPrice: string
+
+  ): Promise<Product[]> {
+    return this.productsService.getAllProducts(title, minPrice, maxPrice);
   }
   /**
    * Retrieves all users with their products

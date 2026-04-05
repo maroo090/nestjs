@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductsDto } from './dtos/create-products.dto';
 import { UpdateProduct } from './dtos/update-product.dto';
 import { UsersService } from 'src/users/user.service';
-import { Repository } from 'typeorm';
+import { Between, Like, Repository } from 'typeorm';
 import { Product } from './products.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -38,11 +38,18 @@ export class ProductService {
    * Retrieves all products from the database
    * @returns Promise resolving to an array of Product entities
    */
-  public getAllProducts(): Promise<Product[]> {
-    return this.productRepository.find();
-    // ** { relations: { user: true, reviews: true } } to fetch the related reviews and user that create this product 
-  }
+  public getAllProducts(title?: string, minPrice?: string, maxPrice?: string): Promise<Product[]> {
+    const filters = {
+      ...(title ? { title: Like(`%${title.toLowerCase()}%`) } : {}),
+      ...(minPrice && maxPrice ? { price: Between(parseInt(minPrice), parseInt(maxPrice)) } : {}),
 
+    }
+
+    return this.productRepository.find({
+      where: filters
+    });    // ** { relations: { user: true, reviews: true } } to fetch the related reviews and user that create this product 
+  }
+  /// where: { title: Like(`%${title}%`) }
   /**
    * Retrieves a product by its ID
    * @param id - The product's unique identifier

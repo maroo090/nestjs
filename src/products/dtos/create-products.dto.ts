@@ -19,14 +19,14 @@ export class CreateProductsDto {
   @IsNotEmpty()
   @MinLength(3)
   @MaxLength(150)
-  title: string;
+  title!: string;
   @IsString()
   @MinLength(3)
   @MaxLength(150)
-  description: string;
+  description!: string;
   @IsNumber()
   @IsNotEmpty()
   @Type(() => Number)
   @Min(0)
-  price: number;
+  price!: number;
 }

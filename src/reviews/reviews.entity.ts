@@ -16,26 +16,26 @@ import { User } from 'src/users/users.entity';
 @Entity({ name: 'reviews' })
 export class Review {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
   @Column({ type: 'varchar', length: 150 })
-  comment: string;
+  comment!: string;
 
   @Column({ type: 'int' })
-  rating: number;
+  rating!: number;
 
   @Column({ type: 'timestamp', default: () => CURRANT_TIMESTAMP })
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({
     type: 'timestamp',
     default: () => CURRANT_TIMESTAMP,
     onUpdate: CURRANT_TIMESTAMP,
   })
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @ManyToOne(() => Product, (product) => product.reviews)
-  product: Product;
+  product!: Product;
 
   @ManyToOne(() => User, (user) => user.reviews)
-  user: User;
+  user!: User;
 }

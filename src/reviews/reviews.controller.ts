@@ -1,21 +1,27 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Param, Put, Delete } from '@nestjs/common';
 import { ReviewService } from './reviews.service';
 import { CreateReviewsDto } from './dtos/create.reviews.dtos';
 import { Review } from './reviews.entity';
+import { Roles } from 'src/users/decorators/user.role.decorators';
+import { UserEnum } from 'src/utils/enums';
+import { CurrentUserDecorator } from 'src/users/decorators/users.decorators';
+import { AuthRoleGard } from 'src/users/guard/auth-role.gard';
+import { type JWTPayloadType } from 'src/utils/types';
+import { UpdateReviewsDto } from './dtos/update.reviews.dtos';
 
 /**
  * Controller for handling review-related HTTP requests
  */
-@Controller()
+@Controller('/api/reviews')
 export class ReviewController {
-  constructor(private readonly reviewService: ReviewService) {}
+  constructor(private readonly reviewService: ReviewService) { }
 
   /**
    * Retrieves all reviews
    * @returns Promise resolving to array of Review entities
    */
-  @Get('/api/reviews')
+  @Get()
   public getAllReviews(): Promise<Review[]> {
     return this.reviewService.getAllReviews();
   }
@@ -25,10 +31,37 @@ export class ReviewController {
    * @param createReviewsDto - Object containing review details
    * @returns Promise resolving to created Review entity
    */
-  @Post('/api/reviews')
+  @Post(':productId')
+  @UseGuards(AuthRoleGard)
+  @Roles(UserEnum.ADMIN, UserEnum.USER)
   public createReview(
     @Body() createReviewsDto: CreateReviewsDto,
+    @Param('productId') productId: number,
+    @CurrentUserDecorator() payload: JWTPayloadType,
   ): Promise<Review> {
-    return this.reviewService.createReviews(createReviewsDto);
+    return this.reviewService.createReviews(createReviewsDto, payload.id, productId);
+  }
+  @Put(':reviewId')
+  @UseGuards(AuthRoleGard)
+  @Roles(UserEnum.ADMIN, UserEnum.USER)
+  public updateReview(
+    @Body() body: UpdateReviewsDto,
+    @Param('reviewId') reviewId: number,
+  ): Promise<Review> {
+    return this.reviewService.updateReview(body, reviewId);
+  }
+
+  @Delete(':reviewId')
+  @UseGuards(AuthRoleGard)
+  @Roles(UserEnum.ADMIN, UserEnum.USER)
+  public deleteReview(
+    @Param('reviewId') reviewId: number,
+  ): Promise<string | { message: string; review: Review; }> {
+    return this.reviewService.deleteReview(reviewId);
+  }
+
+  @Get(':reviewId')
+  public getReviewById(reviewId: number) { 
+    return this.reviewService.getREviewById(reviewId);
   }
 }

@@ -22,36 +22,36 @@ import { Exclude } from 'class-transformer';
 @Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: 'varchar', length: 150, nullable: true })
-  username: string;
+  username!: string;
 
   @Column({ type: 'varchar', length: 150, unique: true })
-  email: string;
+  email!: string;
   @Column()
   @Exclude()
-  password: string;
+  password!: string;
 
   @Column({ type: 'enum', enum: UserEnum, default: UserEnum.USER })
-  userType: string;
+  userType!: string;
 
   @Column({ type: 'boolean', default: false })
-  isAccountVerified: boolean;
+  isAccountVerified!: boolean;
 
   @Column({ type: 'timestamp', default: () => CURRANT_TIMESTAMP })
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({
     type: 'timestamp',
     default: () => CURRANT_TIMESTAMP,
     onUpdate: CURRANT_TIMESTAMP,
   })
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @OneToMany(() => Product, (product) => product.user)
-  products: Product[];
+  products!: Product[];
 
   @OneToMany(() => Review, (review) => review.user)
-  reviews: Review[];
+  reviews!: Review[];
 }

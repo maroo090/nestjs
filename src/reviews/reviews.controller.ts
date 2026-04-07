@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, UseGuards, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Param, Put, Delete, Query, ParseIntPipe } from '@nestjs/common';
 import { ReviewService } from './reviews.service';
 import { CreateReviewsDto } from './dtos/create.reviews.dtos';
 import { Review } from './reviews.entity';
@@ -22,8 +22,11 @@ export class ReviewController {
    * @returns Promise resolving to array of Review entities
    */
   @Get()
-  public getAllReviews(): Promise<Review[]> {
-    return this.reviewService.getAllReviews();
+  public getAllReviews(
+    @Query('pageNumber', ParseIntPipe) pageNumber: number,
+    @Query('reviewPerPage', ParseIntPipe) reviewPerPage: number,
+  ): Promise<Review[]> {
+    return this.reviewService.getAllReviews(pageNumber, reviewPerPage);
   }
 
   /**
@@ -47,8 +50,10 @@ export class ReviewController {
   public updateReview(
     @Body() body: UpdateReviewsDto,
     @Param('reviewId') reviewId: number,
+    @CurrentUserDecorator() payload: JWTPayloadType,
+
   ): Promise<Review> {
-    return this.reviewService.updateReview(body, reviewId);
+    return this.reviewService.updateReview(body, reviewId, payload.id);
   }
 
   @Delete(':reviewId')
@@ -56,12 +61,13 @@ export class ReviewController {
   @Roles(UserEnum.ADMIN, UserEnum.USER)
   public deleteReview(
     @Param('reviewId') reviewId: number,
+    @CurrentUserDecorator() payload: JWTPayloadType,
   ): Promise<string | { message: string; review: Review; }> {
-    return this.reviewService.deleteReview(reviewId);
+    return this.reviewService.deleteReview(reviewId, payload.id);
   }
 
   @Get(':reviewId')
-  public getReviewById(reviewId: number) { 
+  public getReviewById(reviewId: number) {
     return this.reviewService.getREviewById(reviewId);
   }
 }

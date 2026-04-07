@@ -2,7 +2,7 @@
 /**
  * Service for managing review operations
  */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Review } from './reviews.entity';
@@ -23,10 +23,23 @@ export class ReviewService {
    * Retrieves all reviews from the database
    * @returns Promise resolving to an array of Review entities
    */
-  public async getAllReviews(): Promise<Review[]> {
-    const reviews = await this.reviewRepo.find();
-    console.log(reviews);
+  public async getAllReviews(pageNumber: number, reviewPerPage: number): Promise<Review[]> {
+    const reviews = await this.reviewRepo.find({
+      skip: reviewPerPage * (pageNumber - 1),
+      take: reviewPerPage,
+      order: {
+        createdAt: 'ASC'
+      }
+    });
     return reviews;
+  }
+
+
+  public async getREviewById(reviewId: number): Promise<Review> {
+    const review = await this.reviewRepo.findOneBy({ id: reviewId })
+    if (!review)
+      throw new NotFoundException("Review not found");
+    return review;
   }
   /**
    * Creates a new review
@@ -48,20 +61,24 @@ export class ReviewService {
     return this.reviewRepo.save(review);
   }
 
-  public async updateReview(updateReview: UpdateReviewsDto, reviewId: number): Promise<Review> {
+  public async updateReview(updateReview: UpdateReviewsDto, reviewId: number, userId: number): Promise<Review> {
     const review = await this.reviewRepo.findOne({ where: { id: reviewId } });
     if (!review) {
       throw new NotFoundException(`Review with id ${reviewId} not found`);
     }
+    if (review?.user.id !== userId)
+      throw new ForbiddenException('You are not authorized to update this review')
     review.comment = updateReview.comment ?? review.comment;
     review.rating = updateReview.rating ?? review.rating;
     return await this.reviewRepo.save(review);
   }
 
-  public async deleteReview(reviewId: number): Promise<{ message: string; review: Review }> {
+  public async deleteReview(reviewId: number, userId: number): Promise<{ message: string; review: Review }> {
     const review = await this.reviewRepo.findOneBy({ id: reviewId });
     if (!review)
       throw new NotFoundException("Review not found");
+    if (review.user.id !== userId)
+      throw new ForbiddenException("You are not authorized to delete this review");
     await this.reviewRepo.remove(review)
     return {
       message: "Review deleted successfully",
@@ -69,10 +86,5 @@ export class ReviewService {
     };
 
   }
-  public async getREviewById(reviewId: number): Promise<Review> {
-    const review = await this.reviewRepo.findOneBy({ id: reviewId })
-    if (!review)
-      throw new NotFoundException("Review not found");
-    return review;
-  }
+
 }

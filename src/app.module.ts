@@ -8,6 +8,7 @@ import { ProductModule } from './products/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggerInterceptor } from './utils/interceptor/logger.interceptor';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { LoggerInterceptor } from './utils/interceptor/logger.interceptor';
       envFilePath: '.env',
     }),
     ProductModule,
+    UploadsModule,
     UsersModule,
     ReviewsModule,
     TypeOrmModule.forRootAsync({

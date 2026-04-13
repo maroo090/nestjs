@@ -12,6 +12,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { LoginDto } from './dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { AuthReturnType, JWTPayloadType } from 'src/utils/types';
+import { MailService } from "src/mail/mail.service";
 @Injectable()
 export class AuthProvider {
 
@@ -19,6 +20,8 @@ export class AuthProvider {
         @InjectRepository(User)
         private readonly userRepo: Repository<User>,
         private readonly jwtService: JwtService,
+        private readonly mailService: MailService,
+
     ) {
 
     }
@@ -58,19 +61,24 @@ export class AuthProvider {
      * @throws UnauthorizedException if password is invalid
      */
     public async login(loginDto: LoginDto): Promise<AuthReturnType> {
-        const { email, password } = loginDto;
-        const user = await this.userRepo.findOne({ where: { email } });
-        if (!user) {
-            throw new BadRequestException('user is not exist');
+        try {
+            const { email, password } = loginDto;
+            const user = await this.userRepo.findOne({ where: { email } });
+            if (!user) {
+                throw new BadRequestException('user is not exist');
+            }
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                throw new UnauthorizedException('invalid email or pasword ');
+            }
+            const payload: JWTPayloadType = { id: user.id, userType: user.userType };
+            const accessToken = await this.generateJWT(payload);
+            await this.mailService.sendLoginEmail(user.email, user.username)
+            return { user: user, accessToken };
+        } catch (error) {
+            console.log(error)
+            throw new BadRequestException(error)
         }
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            throw new UnauthorizedException('invalid email or pasword ');
-        }
-        const payload: JWTPayloadType = { id: user.id, userType: user.userType };
-        const accessToken = await this.generateJWT(payload);
-
-        return { user: user, accessToken };
     }
     /**
      * Hashes a plain text password using bcrypt

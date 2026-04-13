@@ -38,7 +38,8 @@ export class User {
 
   @Column({ type: 'boolean', default: false })
   isAccountVerified!: boolean;
-
+  @Column({ type: "text", nullable: true, default: null })
+  profileImage!: string | null;
   @Column({ type: 'timestamp', default: () => CURRANT_TIMESTAMP })
   createdAt!: Date;
 

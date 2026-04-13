@@ -2,13 +2,18 @@
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
 import { RegisterDto } from './dtos/register.dto';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LoginDto } from './dtos/login.dto';
 import { AuthReturnType, JWTPayloadType } from 'src/utils/types';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { AuthProvider } from './auth.provider';
-/* eslint-disable prettier/prettier */
+import { join } from 'path';
+import { existsSync, unlinkSync } from 'fs';/* eslint-disable prettier/prettier */
 /**
  * Service for managing user operations including authentication and user CRUD
  */
@@ -17,7 +22,7 @@ export class UsersService {
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
     private readonly authProvider: AuthProvider,
-  ) {}
+  ) { }
   /**
    * Retrieves all users from the database
    * @returns Promise resolving to an array of User entities
@@ -98,5 +103,36 @@ export class UsersService {
     }
     throw new ForbiddenException('you are not allowed to delete this user');
   }
-  public logout() {}
+  public async setProfileImage(userId: number, newProfileImage: string) {
+    const user = await this.getCurrentUser(userId);
+    if (user.profileImage == null) {
+      user.profileImage = newProfileImage;
+    } else {
+      await this.removeProfileImage(userId);
+      user.profileImage = newProfileImage;
+    }
+    user.profileImage = newProfileImage;
+    return await this.userRepo.save(user);
+  }
+
+  public async removeProfileImage(userId: number) {
+    const user = await this.getCurrentUser(userId);
+    if (!user.profileImage) {
+      throw new BadRequestException('no image found');
+    }
+    const imagePath = join(
+      process.cwd(),
+      `images/uploads/users/${user.profileImage}`,
+    );
+    if (existsSync(imagePath)) {
+      unlinkSync(imagePath);
+    }
+    user.profileImage = null;
+    const image = await this.userRepo.save(user);
+    return {
+      message: "image deleted successfully",
+      image
+    }
+  }
+  public logout() { }
 }

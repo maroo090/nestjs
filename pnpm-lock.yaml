@@ -41,6 +41,9 @@ importers:
       cross-env:
         specifier: ^10.1.0
         version: 10.1.0
+      ejs:
+        specifier: ^5.0.2
+        version: 5.0.2
       nodemailer:
         specifier: ^8.0.5
         version: 8.0.5
@@ -6336,8 +6339,7 @@ snapshots:
 
   ee-first@1.1.1: {}
 
-  ejs@5.0.2:
-    optional: true
+  ejs@5.0.2: {}
 
   electron-to-chromium@1.5.313: {}
 

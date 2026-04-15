@@ -1,10 +1,19 @@
 
 ### 
 POST  http://localhost:5000/api/users/auth/register
-
 Content-Type: application/json
+
 {
-    username:"omar ali",
-    email:"omar@gmail.com",
-    password:"moawed2005"
+    "username":"omar ali",
+    "email":"omar@gmail.com",
+    "password":"moawed2005"
+}
+
+###
+POST  http://localhost:5000/api/users/auth/login
+Content-Type: application/json
+
+{
+    "email":"omar@gmail.com",
+    "password":"moawed2005"
 }

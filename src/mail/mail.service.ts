@@ -12,7 +12,8 @@ export class MailService {
       await this.mailerService.sendMail({
         to: email,
         subject: `New login detected - ${today.toDateString()}`,
-        text: `Hello ${username}, your account was accessed on ${today.toISOString()}. If this wasn't you, please reset your password immediately.`,
+        template: 'login',
+        context:{email,today,username}
       });
       console.log('Email sent successfully');
     } catch (error) {

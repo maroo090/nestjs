@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Exclude } from 'class-transformer';
 import {
   IsEmail,
@@ -19,15 +18,15 @@ export class RegisterDto {
   @IsOptional()
   @IsString()
   @Length(2, 150)
-  username: string;
+  username!: string;
 
   @IsEmail()
   @Length(2, 150)
   @IsNotEmpty()
-  email: string;
+  email!: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(6)
-  password: string;
+  password!: string;
 }

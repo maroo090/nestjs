@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
   BadRequestException,
   Body,
@@ -30,7 +29,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('api/users')
 export class UsersController {
-  constructor(private readonly userService: UsersService) { }
+  constructor(private readonly userService: UsersService) {}
   @Get()
   @Roles(UserEnum.ADMIN)
   @UseGuards(AuthRoleGard)
@@ -93,6 +92,14 @@ export class UsersController {
   @Get('images/:image')
   @UseGuards(AuthGuard)
   public getProfileImage(@Param('image') image: string, @Res() res: Response) {
-    return res.sendFile( image, { root: './images/uploads/users' });
+    return res.sendFile(image, { root: './images/uploads/users' });
+  }
+
+  @Get('verify-email/:id/:verificationToken')
+  public verifyEmail(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('verificationToken') verificationToken: string,
+  ) {
+    return this.userService.verifyEmail(id, verificationToken);
   }
 }

@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { AuthenticatedRequest } from 'src/utils/types';
 

@@ -13,7 +13,8 @@ services:
       POSTGRES_DB: hotel_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
-  pgAdmin:
+
+  pgadmin:
     image: dpage/pgadmin4
     container_name: nestjs-pgadmin
     restart: always
@@ -22,5 +23,24 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: moawed@gmail.com
       PGADMIN_DEFAULT_PASSWORD: moawed2005
+
+  nestjs:
+    build: .
+    container_name: nestjs-app
+    restart: always
+    ports:
+      - '5005:5000'
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: moawed2005
+      DB_NAME: hotel_db
+    volumes:
+      - .:/app
+    command: npm run start:dev
+
 volumes:
   postgres_data:

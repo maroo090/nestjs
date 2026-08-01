@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Product } from '../products/products.entity';
 import { CURRANT_TIMESTAMP } from 'src/utils/constants';
@@ -33,9 +32,14 @@ export class Review {
   })
   updatedAt!: Date;
 
-  @ManyToOne(() => Product, (product) => product.reviews, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Product, (product) => product.reviews, {
+    onDelete: 'CASCADE',
+  })
   product!: Product;
 
-  @ManyToOne(() => User, (user) => user.reviews, { eager: true, onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.reviews, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   user!: User;
 }

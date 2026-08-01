@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { ReviewController } from './reviews.controller';
 import { ReviewService } from './reviews.service';
@@ -15,6 +14,11 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   controllers: [ReviewController],
   providers: [ReviewService],
-  imports: [TypeOrmModule.forFeature([Review]), ProductModule, UsersModule,JwtModule],
+  imports: [
+    TypeOrmModule.forFeature([Review]),
+    ProductModule,
+    UsersModule,
+    JwtModule,
+  ],
 })
-export class ReviewsModule { }
+export class ReviewsModule {}

@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { BadRequestException, Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './user.service';
@@ -43,7 +42,10 @@ import { MailModule } from 'src/mail/mail.module';
           cb(null, filename);
         },
       }),
-      fileFilter: (req: Request, file: Express.Multer.File, cb: (error: Error | null, acceptFile: boolean) => void
+      fileFilter: (
+        req: Request,
+        file: Express.Multer.File,
+        cb: (error: Error | null, acceptFile: boolean) => void,
       ) => {
         if (file.mimetype.includes('image')) {
           cb(null, true);
@@ -54,7 +56,7 @@ import { MailModule } from 'src/mail/mail.module';
       limits: {
         fileSize: 1024 * 1024 * 5,
       },
-    })
+    }),
   ],
 })
-export class UsersModule { }
+export class UsersModule {}

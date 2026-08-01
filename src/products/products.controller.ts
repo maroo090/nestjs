@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
   Body,
   Controller,
@@ -26,7 +25,7 @@ import { type JWTPayloadType } from 'src/utils/types';
  */
 @Controller('api/products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductService) { }
+  constructor(private readonly productsService: ProductService) {}
   /**
    * Creates a new product
    * @param body - CreateProductsDto containing product details
@@ -35,7 +34,10 @@ export class ProductsController {
   @Post()
   @UseGuards(AuthRoleGard)
   @Roles(UserEnum.ADMIN)
-  public create(@Body() body: CreateProductsDto, @CurrentUserDecorator() payload: JWTPayloadType): Promise<Product> {
+  public create(
+    @Body() body: CreateProductsDto,
+    @CurrentUserDecorator() payload: JWTPayloadType,
+  ): Promise<Product> {
     return this.productsService.createProducts(body, payload.id);
   }
   /**
@@ -46,8 +48,7 @@ export class ProductsController {
   public getAllProducts(
     @Query('title') title: string,
     @Query('minPrice') minPrice: string,
-    @Query('maxPrice') maxPrice: string
-
+    @Query('maxPrice') maxPrice: string,
   ): Promise<Product[]> {
     return this.productsService.getAllProducts(title, minPrice, maxPrice);
   }

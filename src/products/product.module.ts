@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { ProductsController } from './products.controller';
 import { ProductService } from './products.service';
@@ -15,6 +14,6 @@ import { JwtModule } from '@nestjs/jwt';
   controllers: [ProductsController],
   providers: [ProductService],
   imports: [UsersModule, TypeOrmModule.forFeature([Product]), JwtModule],
-  exports: [ProductService]
+  exports: [ProductService],
 })
-export class ProductModule { }
+export class ProductModule {}

@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Exclude } from 'class-transformer';
 import {
   IsEmail,
@@ -16,11 +15,11 @@ export class LoginDto {
   @IsEmail()
   @Length(2, 150)
   @IsNotEmpty()
-  email: string;
+  email!: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(6)
   // @Exclude( )
-  password: string;
+  password!: string;
 }

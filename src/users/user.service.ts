@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Repository } from 'typeorm';
 import { User } from './users.entity';
 import { RegisterDto } from './dtos/register.dto';
@@ -13,7 +12,7 @@ import { AuthReturnType, JWTPayloadType } from 'src/utils/types';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { AuthProvider } from './auth.provider';
 import { join } from 'path';
-import { existsSync, unlinkSync } from 'fs';/* eslint-disable prettier/prettier */
+import { existsSync, unlinkSync } from 'fs';
 /**
  * Service for managing user operations including authentication and user CRUD
  */
@@ -22,7 +21,7 @@ export class UsersService {
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
     private readonly authProvider: AuthProvider,
-  ) { }
+  ) {}
   /**
    * Retrieves all users from the database
    * @returns Promise resolving to an array of User entities
@@ -37,7 +36,9 @@ export class UsersService {
    * @param registerDto - Object containing email, username, and password
    * @returns Promise resolving to AuthReturnType containing user and access token
    */
-  public async register(registerDto: RegisterDto): Promise<AuthReturnType> {
+  public async register(
+    registerDto: RegisterDto,
+  ): Promise<{ message: string }> {
     return this.authProvider.register(registerDto);
   }
 
@@ -130,9 +131,27 @@ export class UsersService {
     user.profileImage = null;
     const image = await this.userRepo.save(user);
     return {
-      message: "image deleted successfully",
-      image
-    }
+      message: 'image deleted successfully',
+      image,
+    };
   }
-  public logout() { }
+  public async verifyEmail(
+    userId: number,
+    verificationToken: string,
+  ): Promise<{ message: string }> {
+    const user = await this.getCurrentUser(userId);
+
+    if (user.verificationToken === null) {
+      throw new NotFoundException('no token found');
+    }
+    if (user.verificationToken !== verificationToken) {
+      throw new BadRequestException('token is not valid');
+    }
+    user.isAccountVerified = true;
+    user.verificationToken = null;
+    await this.userRepo.save(user);
+    return { message: 'email verified successfully, login to continue' };
+  }
+
+  public logout() {}
 }

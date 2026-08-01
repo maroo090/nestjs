@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { CURRANT_TIMESTAMP } from 'src/utils/constants';
 import { Product } from 'src/products/products.entity';
@@ -38,7 +37,11 @@ export class User {
 
   @Column({ type: 'boolean', default: false })
   isAccountVerified!: boolean;
-  @Column({ type: "text", nullable: true, default: null })
+
+  @Column({ nullable: true, default: null })
+  verificationToken!: string | null;
+
+  @Column({ type: 'text', nullable: true, default: null })
   profileImage!: string | null;
   @Column({ type: 'timestamp', default: () => CURRANT_TIMESTAMP })
   createdAt!: Date;

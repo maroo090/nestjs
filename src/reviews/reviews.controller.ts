@@ -1,5 +1,15 @@
-/* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, UseGuards, Param, Put, Delete, Query, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseGuards,
+  Param,
+  Put,
+  Delete,
+  Query,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { ReviewService } from './reviews.service';
 import { CreateReviewsDto } from './dtos/create.reviews.dtos';
 import { Review } from './reviews.entity';
@@ -15,7 +25,7 @@ import { UpdateReviewsDto } from './dtos/update.reviews.dtos';
  */
 @Controller('/api/reviews')
 export class ReviewController {
-  constructor(private readonly reviewService: ReviewService) { }
+  constructor(private readonly reviewService: ReviewService) {}
 
   /**
    * Retrieves all reviews
@@ -42,7 +52,11 @@ export class ReviewController {
     @Param('productId') productId: number,
     @CurrentUserDecorator() payload: JWTPayloadType,
   ): Promise<Review> {
-    return this.reviewService.createReviews(createReviewsDto, payload.id, productId);
+    return this.reviewService.createReviews(
+      createReviewsDto,
+      payload.id,
+      productId,
+    );
   }
   @Put(':reviewId')
   @UseGuards(AuthRoleGard)
@@ -51,7 +65,6 @@ export class ReviewController {
     @Body() body: UpdateReviewsDto,
     @Param('reviewId') reviewId: number,
     @CurrentUserDecorator() payload: JWTPayloadType,
-
   ): Promise<Review> {
     return this.reviewService.updateReview(body, reviewId, payload.id);
   }
@@ -62,7 +75,7 @@ export class ReviewController {
   public deleteReview(
     @Param('reviewId') reviewId: number,
     @CurrentUserDecorator() payload: JWTPayloadType,
-  ): Promise<string | { message: string; review: Review; }> {
+  ): Promise<string | { message: string; review: Review }> {
     return this.reviewService.deleteReview(reviewId, payload.id);
   }
 

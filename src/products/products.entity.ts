@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Review } from 'src/reviews/reviews.entity';
 import { User } from 'src/users/users.entity';
 import { CURRANT_TIMESTAMP } from 'src/utils/constants';
@@ -52,6 +51,5 @@ export class Product {
   // **if i want to add review when i fetch the product globally  **{eager:true}**
   @ManyToOne(() => User, (user) => user.products)
   //** */ if i want to add user when i fetch the product  globally**{eager:true}**
-
   user!: User;
 }

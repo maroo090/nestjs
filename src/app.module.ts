@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -44,7 +43,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggerInterceptor,
-    }
+    },
   ],
   // controllers: [],
 })
@@ -53,4 +52,4 @@ export class AppModule implements NestModule {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }
-// 
+//

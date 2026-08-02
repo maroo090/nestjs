@@ -45,7 +45,9 @@ export class User {
   profileImage!: string | null;
   @Column({ type: 'timestamp', default: () => CURRANT_TIMESTAMP })
   createdAt!: Date;
-
+  
+  @Column({nullable: true, default: null})
+  resetPasswordToken!: string | null;
   @Column({
     type: 'timestamp',
     default: () => CURRANT_TIMESTAMP,

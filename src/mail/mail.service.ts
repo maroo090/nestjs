@@ -40,4 +40,22 @@ export class MailService {
       );
     }
   }
+
+    public async sendResetPasswordTemplate(email: string,link: string) {
+    try {
+      await this.mailerService.sendMail({
+        to: email,
+        from: '"No Reply" <no-reply@nestjs.com>',
+        subject: `reset Password `,
+        template: 'verify-email',
+        context: { link },
+      });
+      console.log('Email sent successfully');
+    } catch (error) {
+      console.error('Error sending email:', error);
+      throw new InternalServerErrorException(
+        'Failed to send verification email',
+      );
+    }
+  }
 }

@@ -11,6 +11,7 @@ import { AuthReturnType, JWTPayloadType } from 'src/utils/types';
 import { MailService } from 'src/mail/mail.service';
 import { randomBytes } from 'node:crypto';
 import { ConfigService } from '@nestjs/config';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 @Injectable()
 export class AuthProvider {
   constructor(
@@ -91,6 +92,52 @@ export class AuthProvider {
       throw new BadRequestException(error);
     }
   }
+
+  public async sendResetPassword(email: string) {
+    const user = await this.userRepo.findOne({ where: { email } });
+    if (!user) {
+      return {
+        message:
+          'If that email exists in our system, we sent a password reset link.',
+      };
+    }
+    user.resetPasswordToken = randomBytes(32).toString('hex');
+    const result = await this.userRepo.save(user);
+    const link = `http://localhost:3000/reset-password/${result.id}/${result.resetPasswordToken}`;
+    await this.mailService.sendResetPasswordTemplate(email, link);
+
+    return { message: 'Password reset link sent' };
+  }
+
+  public async resetPasswordVerify(id: number, token: string) {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) {
+      return {
+        message:
+          'If that email exists in our system, we sent a password reset link.',
+      };
+    }
+    if (user.resetPasswordToken === null || user.resetPasswordToken !== token) {
+      throw new BadRequestException('Invalid link or token');
+    }
+    return { message: 'Password reset link verified' };
+  }
+
+  public async resetPasword(dto:ResetPasswordDto) {
+    const { newPassword, userId, token } = dto;
+    const user = await this.userRepo.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new BadRequestException('Invalid userId');
+    }
+    if (user.resetPasswordToken===null || user.resetPasswordToken !== token) {
+      throw new BadRequestException('Invalid link or token');
+    }
+    user.password = await this.hashPassword(newPassword);
+    user.resetPasswordToken = null;
+    await this.userRepo.save(user);
+    return { message: 'Password reset successfully' };
+  }
+
   /**
    * Hashes a plain text password using bcrypt
    * @param password - Plain text password to hash

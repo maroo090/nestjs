@@ -5,6 +5,8 @@ import {
   Delete,
   Get,
   Headers,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -26,6 +28,8 @@ import { UserEnum } from '../utils/enums';
 import { AuthRoleGard } from './guard/auth-role.gard';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ForgotPasswordDto } from './dtos/forgot-password.dto';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 
 @Controller('api/users')
 export class UsersController {
@@ -102,4 +106,27 @@ export class UsersController {
   ) {
     return this.userService.verifyEmail(id, verificationToken);
   }
-}
+
+
+  // Post /apiusers/forgot-password
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  public sendResetPassword(@Body() body: ForgotPasswordDto) {
+    return this.userService.sendResetPassword(body.email);
+  }
+  
+  //GET /api/users/reset-password/:id/:token
+  @Get('reset-password/:id/:token')
+  public resetPasswordVerify( 
+    Param("id",ParseIntPipe) id:number,
+    Param("token") token:string
+    {
+    return this.userService.resetPasswordVerify(id, token);
+  }
+
+  //POST /api/users/reset-password
+  @Post('reset-password') 
+  public resetPasword(@Body() body:ResetPasswordDto) {
+    return this.userService.resetPasword(body);
+  }
+}  

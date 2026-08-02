@@ -152,6 +152,20 @@ export class UsersService {
     await this.userRepo.save(user);
     return { message: 'email verified successfully, login to continue' };
   }
+  
 
-  public logout() {}
+    public async sendResetPassword(email: string) {
+      return await this.authProvider.sendResetPassword(email);
+    }
+
+    public async resetPasswordVerify(id: number, token: string) {
+      return await this.authProvider.resetPasswordVerify(id, token);
+    }
+
+    public async resetPasword(dto: ResetPasswordDto) {
+
+      return await this.authProvider.resetPasword(dto);
+    }
+
+      public logout() {}
 }

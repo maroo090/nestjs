@@ -38,7 +38,7 @@ export class User {
   @Column({ type: 'boolean', default: false })
   isAccountVerified!: boolean;
 
-  @Column({ nullable: true, default: null })
+  @Column({ type: 'varchar', nullable: true, default: null })
   verificationToken!: string | null;
 
   @Column({ type: 'text', nullable: true, default: null })
@@ -46,7 +46,7 @@ export class User {
   @Column({ type: 'timestamp', default: () => CURRANT_TIMESTAMP })
   createdAt!: Date;
   
-  @Column({nullable: true, default: null})
+  @Column({ type: 'varchar', nullable: true, default: null })
   resetPasswordToken!: string | null;
   @Column({
     type: 'timestamp',

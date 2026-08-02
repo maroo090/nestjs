@@ -13,6 +13,7 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { AuthProvider } from './auth.provider';
 import { join } from 'path';
 import { existsSync, unlinkSync } from 'fs';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
 /**
  * Service for managing user operations including authentication and user CRUD
  */

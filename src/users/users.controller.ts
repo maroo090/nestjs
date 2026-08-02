@@ -117,10 +117,7 @@ export class UsersController {
   
   //GET /api/users/reset-password/:id/:token
   @Get('reset-password/:id/:token')
-  public resetPasswordVerify( 
-    Param("id",ParseIntPipe) id:number,
-    Param("token") token:string
-    {
+  public resetPasswordVerify( @Param("id",ParseIntPipe) id:number ,@Param("token") token:string){
     return this.userService.resetPasswordVerify(id, token);
   }
 

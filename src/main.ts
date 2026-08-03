@@ -19,10 +19,21 @@ async function bootstrap() {
     //credentials: true,
   });
 
-    const swagger=new DocumentBuilder().setVersion('1.0').build();
-    const documantation=SwaggerModule.createDocument(app,swagger);
-  SwaggerModule.setup('swagger',app,documantation);
-  
+  const swagger = new DocumentBuilder()
+    .setTitle('Nest Small E-commerce API')
+    .setDescription('A Nest.js API for E-commerce')
+    .addServer('http://localhost:5000')
+    .setTermsOfService('https://github.com/mohamed-abdelrhman/nestjs-ecommerce')
+    .setLicense(
+      'MIT',
+      'https://github.com/mohamed-abdelrhman/nestjs-ecommerce/blob/main/LICENSE',
+    )
+
+    .setVersion('1.0')
+    .build();
+  const documantation = SwaggerModule.createDocument(app, swagger);
+  SwaggerModule.setup('swagger', app, documantation);
+
   await app.listen(port);
 }
 void bootstrap();

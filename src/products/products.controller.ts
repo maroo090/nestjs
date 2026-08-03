@@ -19,10 +19,13 @@ import { Roles } from 'src/users/decorators/user.role.decorators';
 import { UserEnum } from 'src/utils/enums';
 import { CurrentUserDecorator } from 'src/users/decorators/users.decorators';
 import { type JWTPayloadType } from 'src/utils/types';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
 /**
  * Controller for handling product-related HTTP requests
  */
+ // if you want chnage the name of the tage in the swaggeer docs  add @ApiTags('products Group ')
+@ApiTags('products Group ')
 @Controller('api/products')
 export class ProductsController {
   constructor(private readonly productsService: ProductService) {}
@@ -45,6 +48,9 @@ export class ProductsController {
    * @returns Promise resolving to array of Product entities
    */
   @Get()
+  @ApiQuery({ name: 'title', required: false })
+  @ApiQuery({ name: 'minPrice', required: false })
+  @ApiQuery({ name: 'maxPrice', required: false })
   public getAllProducts(
     @Query('title') title: string,
     @Query('minPrice') minPrice: string,

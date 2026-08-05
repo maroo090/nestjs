@@ -19,7 +19,7 @@ import { Roles } from 'src/users/decorators/user.role.decorators';
 import { UserEnum } from 'src/utils/enums';
 import { CurrentUserDecorator } from 'src/users/decorators/users.decorators';
 import { type JWTPayloadType } from 'src/utils/types';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 /**
  * Controller for handling product-related HTTP requests
@@ -37,6 +37,8 @@ export class ProductsController {
   @Post()
   @UseGuards(AuthRoleGard)
   @Roles(UserEnum.ADMIN)
+  @ApiSecurity('bearer')
+
   public create(
     @Body() body: CreateProductsDto,
     @CurrentUserDecorator() payload: JWTPayloadType,
@@ -51,6 +53,7 @@ export class ProductsController {
   @ApiQuery({ name: 'title', required: false })
   @ApiQuery({ name: 'minPrice', required: false })
   @ApiQuery({ name: 'maxPrice', required: false })
+ @ApiSecurity('bearer')
   public getAllProducts(
     @Query('title') title: string,
     @Query('minPrice') minPrice: string,
@@ -85,7 +88,8 @@ export class ProductsController {
    */
   @Put('/:id')
   @UseGuards(AuthRoleGard)
-  @Roles(UserEnum.ADMIN)
+  @Roles(UserEnum.ADMIN, UserEnum.USER)
+  @ApiSecurity('bearer')
   public updateProductById(
     @Body() body: UpdateProduct,
     @Param('id', ParseIntPipe) id: number,
@@ -101,6 +105,7 @@ export class ProductsController {
   @Delete('/:id')
   @UseGuards(AuthRoleGard)
   @Roles(UserEnum.ADMIN)
+  @ApiSecurity('bearer')
   public deleteProductsById(@Param('id') id: number): Promise<Product> {
     return this.productsService.deleteProductsById(id);
   }

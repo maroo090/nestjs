@@ -30,6 +30,8 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ForgotPasswordDto } from './dtos/forgot-password.dto';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
+import { ApiBody, ApiConsumes, ApiSecurity } from '@nestjs/swagger';
+import { ImageUploadDto } from './dtos/image-upload.dto';
 
 @Controller('api/users')
 export class UsersController {
@@ -85,6 +87,9 @@ export class UsersController {
   @Post('upload-image')
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('user-image'))
+  @ApiSecurity('bearer')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({type:ImageUploadDto,description:'upload profile image'}) 
   public uploadProfileImage(
     @UploadedFile() file: Express.Multer.File,
     @CurrentUserDecorator() payload: JWTPayloadType,

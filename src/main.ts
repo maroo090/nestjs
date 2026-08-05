@@ -22,13 +22,14 @@ async function bootstrap() {
   const swagger = new DocumentBuilder()
     .setTitle('Nest Small E-commerce API')
     .setDescription('A Nest.js API for E-commerce')
-    .addServer('http://localhost:5000')
+    .addServer('http://localhost:5005')
     .setTermsOfService('https://github.com/mohamed-abdelrhman/nestjs-ecommerce')
     .setLicense(
       'MIT',
       'https://github.com/mohamed-abdelrhman/nestjs-ecommerce/blob/main/LICENSE',
     )
-
+    .addSecurity('bearer', { type: 'http', scheme: 'bearer' })
+    .addBearerAuth()
     .setVersion('1.0')
     .build();
   const documantation = SwaggerModule.createDocument(app, swagger);

@@ -10,7 +10,9 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes } from '@nestjs/swagger';
 import { type Response } from 'express';
+import { FileUploadDto } from './dtos/file-upload.dto';
 @Controller('api/uploads')
 export class UploadsController {
   @Post()
@@ -22,6 +24,8 @@ export class UploadsController {
   }
   @Post('multiple-images')
   @UseInterceptors(FilesInterceptor('files'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({type:FileUploadDto,description:'upload multiple images'})
   public uploadMultipleFiles(
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {

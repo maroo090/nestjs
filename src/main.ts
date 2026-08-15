@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import helmet from 'helmet';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const port = process.env.PORT || 3000;
@@ -19,6 +20,8 @@ async function bootstrap() {
     //credentials: true,
   });
 
+  // add security to my app 
+    app.use(helmet());
   const swagger = new DocumentBuilder()
     .setTitle('Nest Small E-commerce API')
     .setDescription('A Nest.js API for E-commerce')

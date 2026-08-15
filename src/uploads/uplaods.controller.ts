@@ -10,7 +10,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { ApiConsumes } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { type Response } from 'express';
 import { FileUploadDto } from './dtos/file-upload.dto';
 @Controller('api/uploads')

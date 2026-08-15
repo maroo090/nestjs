@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LoginDto } from './dtos/login.dto';
-import { AuthReturnType, JWTPayloadType } from 'src/utils/types';
+import { AuthReturnType, JWTPayloadType } from '../utils/types';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { AuthProvider } from './auth.provider';
 import { join } from 'path';

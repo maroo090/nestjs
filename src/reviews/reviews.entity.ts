@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Product } from '../products/products.entity';
-import { CURRANT_TIMESTAMP } from 'src/utils/constants';
-import { User } from 'src/users/users.entity';
+import { CURRANT_TIMESTAMP } from '../utils/constants';
+import { User } from '../users/users.entity';
 /**
  * Review entity representing a product review in the database
  * @property id - Unique identifier

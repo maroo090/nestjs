@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import { UserEnum } from 'src/utils/enums';
+import { UserEnum } from '../../utils/enums';
 
 /**
  * Custom decorator to set required roles for route access

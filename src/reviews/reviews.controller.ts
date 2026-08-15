@@ -13,11 +13,11 @@ import {
 import { ReviewService } from './reviews.service';
 import { CreateReviewsDto } from './dtos/create.reviews.dtos';
 import { Review } from './reviews.entity';
-import { Roles } from 'src/users/decorators/user.role.decorators';
-import { UserEnum } from 'src/utils/enums';
-import { CurrentUserDecorator } from 'src/users/decorators/users.decorators';
-import { AuthRoleGard } from 'src/users/guard/auth-role.gard';
-import { type JWTPayloadType } from 'src/utils/types';
+import { Roles } from '../users/decorators/user.role.decorators';
+import { UserEnum } from '../utils/enums';
+import { CurrentUserDecorator } from '../users/decorators/users.decorators';
+import { AuthRoleGard } from '../users/guard/auth-role.gard';
+import { type JWTPayloadType } from '../utils/types';
 import { UpdateReviewsDto } from './dtos/update.reviews.dtos';
 
 /**

@@ -21,7 +21,7 @@ import { UsersService } from './user.service';
 import { RegisterDto } from './dtos/register.dto';
 import { LoginDto } from './dtos/login.dto';
 import { AuthGuard } from './guard/auth.guard';
-import { type JWTPayloadType } from 'src/utils/types';
+import { type JWTPayloadType } from '../utils/types';
 import { CurrentUserDecorator } from './decorators/users.decorators';
 import { Roles } from './decorators/user.role.decorators';
 import { UserEnum } from '../utils/enums';

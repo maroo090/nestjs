@@ -2,7 +2,7 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { JWTPayloadType } from 'src/utils/types';
+import { JWTPayloadType } from '../../utils/types';
 
 /**
  * Guard that validates JWT tokens for protected routes

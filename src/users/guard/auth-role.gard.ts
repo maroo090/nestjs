@@ -3,9 +3,9 @@ import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { UserEnum } from 'src/utils/enums';
+import { UserEnum } from '../../utils/enums';
 import { UsersService } from '../user.service';
-import { JWTPayloadType } from 'src/utils/types';
+import { JWTPayloadType } from '../../utils/types';
 
 /**
  * Guard that validates JWT tokens and checks user roles for protected routes

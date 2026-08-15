@@ -14,11 +14,11 @@ import { CreateProductsDto } from './dtos/create-products.dto';
 import { UpdateProduct } from './dtos/update-product.dto';
 import { ProductService } from './products.service';
 import { Product } from './products.entity';
-import { AuthRoleGard } from 'src/users/guard/auth-role.gard';
-import { Roles } from 'src/users/decorators/user.role.decorators';
-import { UserEnum } from 'src/utils/enums';
-import { CurrentUserDecorator } from 'src/users/decorators/users.decorators';
-import { type JWTPayloadType } from 'src/utils/types';
+import { AuthRoleGard } from '../users/guard/auth-role.gard';
+import { Roles } from '../users/decorators/user.role.decorators';
+import { UserEnum } from '../utils/enums';
+import { CurrentUserDecorator } from '../users/decorators/users.decorators';
+import { type JWTPayloadType } from '../utils/types';
 import { ApiQuery, ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 /**

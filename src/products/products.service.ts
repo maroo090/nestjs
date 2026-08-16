@@ -73,7 +73,7 @@ export class ProductService {
 
   /**
    * Updates an existing product by ID
-   * @param updateProductDto - Object containing optional title, description, and price
+   *@param updateProductDto - Object containing optional title, description, and price
    * @param id - The product's unique identifier
    * @returns Promise resolving to the updated Product entity
    * @throws NotFoundException if product doesn't exist

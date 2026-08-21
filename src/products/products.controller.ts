@@ -55,9 +55,9 @@ export class ProductsController {
   @ApiQuery({ name: 'maxPrice', required: false })
  @ApiSecurity('bearer')
   public getAllProducts(
-    @Query('title') title: string,
-    @Query('minPrice') minPrice: string,
-    @Query('maxPrice') maxPrice: string,
+    @Query('title') title?: string,
+    @Query('minPrice') minPrice?: string,
+    @Query('maxPrice') maxPrice?: string,
   ): Promise<Product[]> {
     return this.productsService.getAllProducts(title, minPrice, maxPrice);
   }
@@ -106,7 +106,7 @@ export class ProductsController {
   @UseGuards(AuthRoleGard)
   @Roles(UserEnum.ADMIN)
   @ApiSecurity('bearer')
-  public deleteProductsById(@Param('id') id: number): Promise<Product> {
-    return this.productsService.deleteProductsById(id);
+  public deleteProductById(@Param('id') id: number): Promise<Product> {
+    return this.productsService.deleteProductById(id);
   }
 }

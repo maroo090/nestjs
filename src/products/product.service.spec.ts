@@ -160,12 +160,12 @@ describe('product.service', () => {
   });
   describe('delete product', () => {
     it('should call (remove) method in product repository and the delete product', async () => {
-      await prodcutService.deleteProductsById(1);
+      await prodcutService.deleteProductById(1);
       expect(productsRepository.remove).toHaveBeenCalled();
       expect(productsRepository.remove).toHaveBeenCalledTimes(1);
     });
     it('it should remove product return success mesagee', async () => {
-      const result = await prodcutService.deleteProductsById(1);
+      const result = await prodcutService.deleteProductById(1);
       expect(result).toMatchObject({
         id: 1,
         title: 'test',
@@ -173,7 +173,7 @@ describe('product.service', () => {
       });
     });
     it('should throw an error if the product is not found', async () => {
-      await expect(prodcutService.deleteProductsById(100)).rejects.toThrow(
+      await expect(prodcutService.deleteProductById(100)).rejects.toThrow(
         NotFoundException,
       );
     });

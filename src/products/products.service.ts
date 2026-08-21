@@ -95,7 +95,7 @@ export class ProductService {
    * @returns Promise resolving to the removed Product entity
    * @throws NotFoundException if product doesn't exist
    */
-  public async deleteProductsById(id: number): Promise<Product> {
+  public async deleteProductById(id: number): Promise<Product> {
     const product = await this.getProductById(id);
     return await this.productRepository.remove(product);
   }

@@ -1,8 +1,7 @@
-/* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductsDto } from './dtos/create-products.dto';
 import { UpdateProduct } from './dtos/update-product.dto';
-import { UsersService } from 'src/users/user.service';
+import { UsersService } from '../users/user.service';
 import { Between, Like, Repository } from 'typeorm';
 import { Product } from './products.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,15 +15,18 @@ export class ProductService {
     private readonly usersService: UsersService,
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
-  ) { }
+  ) {}
 
   /**
    * Creates a new product
    * @param dto - CreateProductsDto containing product details
-   * @param userIs id of the logged in user 
+   * @param userIs id of the logged in user
    * @returns Promise resolving to the created Product entity
    */
-  public async createProducts(dto: CreateProductsDto, userId: number): Promise<Product> {
+  public async createProducts(
+    dto: CreateProductsDto,
+    userId: number,
+  ): Promise<Product> {
     const id = await this.usersService.getCurrentUser(userId);
     const newProduct = this.productRepository.create({
       ...dto,
@@ -38,16 +40,21 @@ export class ProductService {
    * Retrieves all products from the database
    * @returns Promise resolving to an array of Product entities
    */
-  public getAllProducts(title?: string, minPrice?: string, maxPrice?: string): Promise<Product[]> {
+  public getAllProducts(
+    title?: string,
+    minPrice?: string,
+    maxPrice?: string,
+  ): Promise<Product[]> {
     const filters = {
       ...(title ? { title: Like(`%${title.toLowerCase()}%`) } : {}),
-      ...(minPrice && maxPrice ? { price: Between(parseInt(minPrice), parseInt(maxPrice)) } : {}),
-
-    }
+      ...(minPrice && maxPrice
+        ? { price: Between(parseInt(minPrice), parseInt(maxPrice)) }
+        : {}),
+    };
 
     return this.productRepository.find({
-      where: filters
-    });    // ** { relations: { user: true, reviews: true } } to fetch the related reviews and user that create this product 
+      where: filters,
+    }); // ** { relations: { user: true, reviews: true } } to fetch the related reviews and user that create this product
   }
   /// where: { title: Like(`%${title}%`) }
   /**
@@ -66,7 +73,7 @@ export class ProductService {
 
   /**
    * Updates an existing product by ID
-   * @param updateProductDto - Object containing optional title, description, and price
+   *@param updateProductDto - Object containing optional title, description, and price
    * @param id - The product's unique identifier
    * @returns Promise resolving to the updated Product entity
    * @throws NotFoundException if product doesn't exist
@@ -81,14 +88,14 @@ export class ProductService {
     product.price = updateProductDto.price ?? product.price;
     return await this.productRepository.save(product);
   }
-  public getAllUsersAndProducts() { }
+  public getAllUsersAndProducts() {}
   /**
    * Deletes a product by ID
    * @param id - The product's unique identifier
    * @returns Promise resolving to the removed Product entity
    * @throws NotFoundException if product doesn't exist
    */
-  public async deleteProductsById(id: number): Promise<Product> {
+  public async deleteProductById(id: number): Promise<Product> {
     const product = await this.getProductById(id);
     return await this.productRepository.remove(product);
   }

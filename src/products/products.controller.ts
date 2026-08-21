@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
   Body,
   Controller,
@@ -15,18 +14,21 @@ import { CreateProductsDto } from './dtos/create-products.dto';
 import { UpdateProduct } from './dtos/update-product.dto';
 import { ProductService } from './products.service';
 import { Product } from './products.entity';
-import { AuthRoleGard } from 'src/users/guard/auth-role.gard';
-import { Roles } from 'src/users/decorators/user.role.decorators';
-import { UserEnum } from 'src/utils/enums';
-import { CurrentUserDecorator } from 'src/users/decorators/users.decorators';
-import { type JWTPayloadType } from 'src/utils/types';
+import { AuthRoleGard } from '../users/guard/auth-role.gard';
+import { Roles } from '../users/decorators/user.role.decorators';
+import { UserEnum } from '../utils/enums';
+import { CurrentUserDecorator } from '../users/decorators/users.decorators';
+import { type JWTPayloadType } from '../utils/types';
+import { ApiQuery, ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 /**
  * Controller for handling product-related HTTP requests
  */
+ // if you want chnage the name of the tage in the swaggeer docs  add @ApiTags('products Group ')
+@ApiTags('products Group ')
 @Controller('api/products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductService) { }
+  constructor(private readonly productsService: ProductService) {}
   /**
    * Creates a new product
    * @param body - CreateProductsDto containing product details
@@ -35,7 +37,12 @@ export class ProductsController {
   @Post()
   @UseGuards(AuthRoleGard)
   @Roles(UserEnum.ADMIN)
-  public create(@Body() body: CreateProductsDto, @CurrentUserDecorator() payload: JWTPayloadType): Promise<Product> {
+  @ApiSecurity('bearer')
+
+  public create(
+    @Body() body: CreateProductsDto,
+    @CurrentUserDecorator() payload: JWTPayloadType,
+  ): Promise<Product> {
     return this.productsService.createProducts(body, payload.id);
   }
   /**
@@ -43,11 +50,14 @@ export class ProductsController {
    * @returns Promise resolving to array of Product entities
    */
   @Get()
+  @ApiQuery({ name: 'title', required: false })
+  @ApiQuery({ name: 'minPrice', required: false })
+  @ApiQuery({ name: 'maxPrice', required: false })
+ @ApiSecurity('bearer')
   public getAllProducts(
-    @Query('title') title: string,
-    @Query('minPrice') minPrice: string,
-    @Query('maxPrice') maxPrice: string
-
+    @Query('title') title?: string,
+    @Query('minPrice') minPrice?: string,
+    @Query('maxPrice') maxPrice?: string,
   ): Promise<Product[]> {
     return this.productsService.getAllProducts(title, minPrice, maxPrice);
   }
@@ -78,7 +88,8 @@ export class ProductsController {
    */
   @Put('/:id')
   @UseGuards(AuthRoleGard)
-  @Roles(UserEnum.ADMIN)
+  @Roles(UserEnum.ADMIN, UserEnum.USER)
+  @ApiSecurity('bearer')
   public updateProductById(
     @Body() body: UpdateProduct,
     @Param('id', ParseIntPipe) id: number,
@@ -94,7 +105,8 @@ export class ProductsController {
   @Delete('/:id')
   @UseGuards(AuthRoleGard)
   @Roles(UserEnum.ADMIN)
-  public deleteProductsById(@Param('id') id: number): Promise<Product> {
-    return this.productsService.deleteProductsById(id);
+  @ApiSecurity('bearer')
+  public deleteProductById(@Param('id') id: number): Promise<Product> {
+    return this.productsService.deleteProductById(id);
   }
 }

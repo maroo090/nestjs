@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsString, Max, Min } from 'class-validator';
 
 /**
@@ -10,10 +10,11 @@ import { IsInt, IsString, Max, Min } from 'class-validator';
  */
 export class CreateReviewsDto {
   @IsString()
+  @ApiProperty({ example: 'Great product' })
   comment!: string;
   @IsInt()
   @Min(1)
   @Max(5)
+  @ApiProperty({ example: 5, minimum: 1, maximum: 5 })
   rating!: number;
-
 }

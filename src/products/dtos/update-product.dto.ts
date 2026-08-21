@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsString,
   IsNumber,
@@ -19,16 +19,19 @@ export class UpdateProduct {
   @IsNotEmpty()
   @Length(3, 150)
   @IsOptional()
+  @ApiPropertyOptional({ example: 'book' })
   title?: string;
 
   @IsString()
   @Length(3, 150)
   @IsOptional()
+  @ApiPropertyOptional({ example: 'A hardcover novel' })
   description?: string;
 
   @IsNumber()
   @IsNotEmpty()
   @Min(0)
   @IsOptional()
+  @ApiPropertyOptional({ example: 10 })
   price?: number;
 }

@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import {
   IsEmail,
@@ -16,11 +16,13 @@ export class LoginDto {
   @IsEmail()
   @Length(2, 150)
   @IsNotEmpty()
-  email: string;
+  @ApiProperty({ example: 'john@example.com' })
+  email!: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(6)
+  @ApiProperty({ example: 'password123', minLength: 6 })
   // @Exclude( )
-  password: string;
+  password!: string;
 }

@@ -1,9 +1,8 @@
-/* eslint-disable prettier/prettier */
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { CURRANT_TIMESTAMP } from 'src/utils/constants';
-import { Product } from 'src/products/products.entity';
-import { Review } from 'src/reviews/reviews.entity';
-import { UserEnum } from 'src/utils/enums';
+import { CURRANT_TIMESTAMP } from '../utils/constants';
+import { Product } from '../products/products.entity';
+import { Review } from '../reviews/reviews.entity';
+import { UserEnum } from '../utils/enums';
 import { Exclude } from 'class-transformer';
 
 /**
@@ -38,11 +37,17 @@ export class User {
 
   @Column({ type: 'boolean', default: false })
   isAccountVerified!: boolean;
-  @Column({ type: "text", nullable: true, default: null })
+
+  @Column({ type: 'varchar', nullable: true, default: null })
+  verificationToken!: string | null;
+
+  @Column({ type: 'text', nullable: true, default: null })
   profileImage!: string | null;
   @Column({ type: 'timestamp', default: () => CURRANT_TIMESTAMP })
   createdAt!: Date;
-
+  
+  @Column({ type: 'varchar', nullable: true, default: null })
+  resetPasswordToken!: string | null;
   @Column({
     type: 'timestamp',
     default: () => CURRANT_TIMESTAMP,

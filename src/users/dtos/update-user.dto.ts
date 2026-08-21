@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import {
   IsNotEmpty,
@@ -18,11 +18,13 @@ export class UpdateUserDto {
   @IsString()
   @Length(2, 150)
   @IsOptional()
+  @ApiPropertyOptional({ example: 'john_doe' })
   username?: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(6)
   @IsOptional()
+  @ApiPropertyOptional({ example: 'password123', minLength: 6 })
   password?: string;
 }

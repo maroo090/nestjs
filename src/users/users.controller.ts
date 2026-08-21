@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
   BadRequestException,
   Body,
@@ -6,6 +5,8 @@ import {
   Delete,
   Get,
   Headers,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -20,17 +21,21 @@ import { UsersService } from './user.service';
 import { RegisterDto } from './dtos/register.dto';
 import { LoginDto } from './dtos/login.dto';
 import { AuthGuard } from './guard/auth.guard';
-import { type JWTPayloadType } from 'src/utils/types';
+import { type JWTPayloadType } from '../utils/types';
 import { CurrentUserDecorator } from './decorators/users.decorators';
 import { Roles } from './decorators/user.role.decorators';
 import { UserEnum } from '../utils/enums';
 import { AuthRoleGard } from './guard/auth-role.gard';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ForgotPasswordDto } from './dtos/forgot-password.dto';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
+import { ApiBody, ApiConsumes, ApiSecurity } from '@nestjs/swagger';
+import { ImageUploadDto } from './dtos/image-upload.dto';
 
 @Controller('api/users')
 export class UsersController {
-  constructor(private readonly userService: UsersService) { }
+  constructor(private readonly userService: UsersService) {}
   @Get()
   @Roles(UserEnum.ADMIN)
   @UseGuards(AuthRoleGard)
@@ -82,6 +87,9 @@ export class UsersController {
   @Post('upload-image')
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('user-image'))
+  @ApiSecurity('bearer')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({type:ImageUploadDto,description:'upload profile image'}) 
   public uploadProfileImage(
     @UploadedFile() file: Express.Multer.File,
     @CurrentUserDecorator() payload: JWTPayloadType,
@@ -93,6 +101,34 @@ export class UsersController {
   @Get('images/:image')
   @UseGuards(AuthGuard)
   public getProfileImage(@Param('image') image: string, @Res() res: Response) {
-    return res.sendFile( image, { root: './images/uploads/users' });
+    return res.sendFile(image, { root: './images/uploads/users' });
   }
-}
+
+  @Get('verify-email/:id/:verificationToken')
+  public verifyEmail(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('verificationToken') verificationToken: string,
+  ) {
+    return this.userService.verifyEmail(id, verificationToken);
+  }
+
+
+  // Post /apiusers/forgot-password
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  public sendResetPassword(@Body() body: ForgotPasswordDto) {
+    return this.userService.sendResetPassword(body.email);
+  }
+  
+  //GET /api/users/reset-password/:id/:token
+  @Get('reset-password/:id/:token')
+  public resetPasswordVerify( @Param("id",ParseIntPipe) id:number ,@Param("token") token:string){
+    return this.userService.resetPasswordVerify(id, token);
+  }
+
+  //POST /api/users/reset-password
+  @Post('reset-password') 
+  public resetPasword(@Body() body:ResetPasswordDto) {
+    return this.userService.resetPasword(body);
+  }
+}  

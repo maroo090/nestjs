@@ -123,13 +123,13 @@ export class AuthProvider {
     return { message: 'Password reset link verified' };
   }
 
-  public async resetPasword(dto:ResetPasswordDto) {
+  public async resetPasword(dto: ResetPasswordDto) {
     const { newPassword, userId, token } = dto;
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) {
       throw new BadRequestException('Invalid userId');
     }
-    if (user.resetPasswordToken===null || user.resetPasswordToken !== token) {
+    if (user.resetPasswordToken === null || user.resetPasswordToken !== token) {
       throw new BadRequestException('Invalid link or token');
     }
     user.password = await this.hashPassword(newPassword);
